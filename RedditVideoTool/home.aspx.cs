@@ -1,9 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Policy;
 using System.Text;
+using System.Web;
+using System.Web.Services;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using RedditSharp;
 
-namespace RedditVideoTool
+namespace Reddit_rVideos
 {
     public partial class home : System.Web.UI.Page
     {
@@ -13,7 +19,6 @@ namespace RedditVideoTool
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            CallJavascriptFunction("alert", "'works'");
             var reddit = new Reddit();
             //var user = reddit.LogIn("MrCarder", "Cardinals08");
 
@@ -88,14 +93,5 @@ namespace RedditVideoTool
                 player.Visible = true;
             }
         }
-
-        public void CallJavascriptFunction(string fName, string fParams)
-        {
-            var sb = new System.Text.StringBuilder();
-            //sb.Append(@"<script>");
-            sb.Append(fName + "(" + fParams + ");");
-            //sb.Append(@"</script>");
-            System.Web.UI.ScriptManager.RegisterStartupScript(this, this.GetType(), "JCall1", sb.ToString(), true);
-        }   
     }
 }
