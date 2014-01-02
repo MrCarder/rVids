@@ -1,0 +1,75 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Policy;
+using System.Text;
+using System.Web;
+using System.Web.Services;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using RedditSharp;
+
+namespace Reddit_rVideos
+{
+    public partial class home : System.Web.UI.Page
+    {
+        public string videoIds;
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            var reddit = new Reddit();
+            //var user = reddit.LogIn("MrCarder", "Cardinals08");
+
+            var subreddit = reddit.GetSubreddit("/r/videos");
+            var posts = subreddit.GetPosts();
+            //int videoCount;
+            //bool valid = Int32.TryParse(txtVideoCount.Value, out videoCount);
+            var videoUrls = GetVideoUrls(posts, 10);
+            videoIds = GetVideoIdStrings(videoUrls);
+        }
+
+        public List<string> GetVideoUrls(Listing<Post> posts, int numPosts)
+        {
+            var urls = new List<string>();
+
+            foreach (var p in posts)
+            {
+                var myUri = new Uri(p.Url);
+                var host = myUri.Host;
+
+                if (urls.Count < numPosts)
+                {
+                    if (host == "www.youtube.com") urls.Add(p.Url);
+                }
+                else
+                    break;
+            }
+
+            return urls;
+        }
+
+        public string GetVideoIdStrings(List<string> urls)
+        {
+            //TODO Should probably be moved
+            if (urls.Count < 1) return "";
+            var videoIds = new List<string>();
+            var arrayStringBuilder = new StringBuilder();
+            foreach (var url in urls)
+            {
+                int index = url.IndexOf("v=", System.StringComparison.Ordinal);
+                int index2 = url.IndexOf("&", System.StringComparison.Ordinal);
+
+                if (index2 > index && index2 > 0) videoIds.Add(url.Substring(index + 2, index2 - (index + 2)));
+                else videoIds.Add(url.Substring(index + 2));
+            }
+            foreach (var videoId in videoIds)
+            {
+                arrayStringBuilder.Append("'" + videoId + "',");
+            }
+            var arrayString = arrayStringBuilder.ToString().Substring(0, arrayStringBuilder.Length - 1);
+
+
+            return arrayString;
+        }
+    }
+}
