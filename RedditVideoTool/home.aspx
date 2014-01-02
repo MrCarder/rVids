@@ -24,10 +24,6 @@
 
     // 4. The API will call this function when the video player is ready.
     function onPlayerReady(event) {
-        //event.target.playVideo();
-        //player.loadVideoById({
-        //    'videoId': '6ravZzYKR34'
-        //});
         player.loadPlaylist([<%=videoIds%>]);
         event.target.playVideo();
     }
@@ -59,10 +55,15 @@
     <div>
         <h1>/r/Videos</h1>
     </div>
+        <div id="inputs">
+            
+            <asp:TextBox ID="txtVideoCount" runat="server"></asp:TextBox>
+            <br />
+            <asp:Button ID="btnStartVideos" runat="server" Text="Go!" OnClick="btnStartVideos_Click" />
+            
+        </div>
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
-    <div id="player"></div>
-    <input type="text" id="txtVideoCount" runat="server"/>
-    <input type="button" value="Current" id="btnAppLookup" onclick="GetCurVid()" />   
+    <div id="player" runat="server" Visible="False"></div>
     </form>
 </body>
 </html>

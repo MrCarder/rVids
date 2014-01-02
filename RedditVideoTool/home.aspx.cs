@@ -14,6 +14,8 @@ namespace Reddit_rVideos
     public partial class home : System.Web.UI.Page
     {
         public string videoIds;
+        public int videoCount;
+        public bool loadPlayer;
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -22,10 +24,20 @@ namespace Reddit_rVideos
 
             var subreddit = reddit.GetSubreddit("/r/videos");
             var posts = subreddit.GetPosts();
-            //int videoCount;
-            //bool valid = Int32.TryParse(txtVideoCount.Value, out videoCount);
-            var videoUrls = GetVideoUrls(posts, 10);
-            videoIds = GetVideoIdStrings(videoUrls);
+
+            if (IsPostBack)
+            {
+                bool valid = false;
+                if (!string.IsNullOrEmpty(txtVideoCount.Text))
+                {
+                    valid = Int32.TryParse(txtVideoCount.Text, out videoCount);
+                }
+                if (valid)
+                {
+                    var videoUrls = GetVideoUrls(posts, videoCount);
+                    videoIds = GetVideoIdStrings(videoUrls);
+                }
+            }
         }
 
         public List<string> GetVideoUrls(Listing<Post> posts, int numPosts)
@@ -70,6 +82,16 @@ namespace Reddit_rVideos
 
 
             return arrayString;
+        }
+
+        protected void btnStartVideos_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtVideoCount.Text))
+            {
+                //loadPlayer = true;
+                //var valid = Int32.TryParse(txtVideoCount.Text, out videoCount);
+                player.Visible = true;
+            }
         }
     }
 }
