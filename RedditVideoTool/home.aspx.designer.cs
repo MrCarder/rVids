@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Reddit_rVideos {
+namespace RedditVideoTool {
     
     
     public partial class home {
